@@ -2,6 +2,8 @@
 
 > **新**的文字主题
 
+预览地址：https://moe.sb
+
 参考的单页：Minimal GitHub：https://github.com/pages-themes/minimal
 
 文章列表/文章页(几乎完全抄袭)：Mayx https://mabbs.github.io/
