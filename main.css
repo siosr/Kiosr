@@ -11,7 +11,7 @@ a{color:#222;text-decoration:none}
 a:focus,a:hover{color:#222;background-color:#f0f8ff}
 a small{font-size:11px;color:#777;margin-top:-.3em;display:block}
 a:hover small{color:#777}
-#wrap{width:860px;margin:0 auto}
+#wrap{width: 860px;margin:0 auto;}
 blockquote{border-left:1px solid #e5e5e5;margin:0;padding:0 0 0 20px;font-style:italic}
 code{background-color:#000;border-radius:2px;color:#fff;font-size:.8rem;margin:0 2px;padding:2px 5px;white-space:pre-wrap}
 code,pre{font-family:Monaco,Bitstream Vera Sans Mono,Lucida Console,Terminal,Consolas,Liberation Mono,DejaVu Sans Mono,Courier New,monospace}
@@ -22,7 +22,7 @@ td,th{text-align:left;padding:5px 10px;border-bottom:1px solid #e5e5e5}
 dt{font-weight:700}
 dt,th{color:#444}
 img{max-width:100%;height:auto}
-header{width:22%;float:left;position:fixed;-webkit-font-smoothing:subpixel-antialiased}
+header{width: 32%;float:left;-webkit-font-smoothing:subpixel-antialiased}
 p.tips{background-color:#f8f8f8;border-bottom-right-radius:2px;border-left:4px solid #f66;border-top-right-radius:2px;margin:2em 0;padding:12px 24px 12px 30px;position:relative}
 p.tips:before{background-color:#f66;border-radius:100%;color:#fff;content:"!";font-family:Dosis,Source Sans Pro,Helvetica Neue,Arial,sans-serif;font-size:14px;font-weight:700;left:-12px;line-height:20px;position:absolute;height:20px;width:20px;text-align:center;top:14px}
 ul.menu{list-style:none;height:40px;padding:0;width:99%}
@@ -114,8 +114,8 @@ article a:hover{border-bottom:2px dashed #969696}
 .ins-section .ins-search-item.active .ins-search-preview,.ins-section .ins-search-item.active .ins-slug,.ins-section .ins-search-item:hover .ins-search-preview,.ins-section .ins-search-item:hover .ins-slug,.ins-section .ins-search-item:hover header{color:#fff;background-color:#006bde}
 @media print,screen and (max-width:960px){body{padding:20px}
 #wrap{width:99%}
-header{width:40%}
-section{width:55%}
+header{width:30%}
+#search-form,section{width:65%}
 }
 @media print,screen and (max-width:720px){div#wrap{width:auto;margin:0}
 footer,header,section{float:none;position:static;width:auto}
