@@ -10,7 +10,7 @@
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
  $this->need('h.php');
  ?>
-<p style="width:100%;text-align:center;margin:0"><?php $this->archiveTitle(array(
+<p class="center"><?php $this->archiveTitle(array(
 			'category'  =>  _t('分类 %s 下的文章'),
 			'search'	=>  _t('包含关键字 %s 的文章'),
 			'tag'	   =>  _t('标签 %s 下的文章'),
