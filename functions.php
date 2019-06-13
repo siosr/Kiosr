@@ -108,7 +108,7 @@ function themeInit($archive){
 }
 function url($content){
   $content = preg_replace('#<a(.*?) href="([^"]*/)?(([^"/]*)\.[^"]*)"(.*?)>#','<a$1 class="link" href="$2$3"$5 target="_blank">', $content);
-  $content = preg_replace('#<img(.*?) src="([^"]*/)?(([^"/]*)\.[^"]*)"(.*?) alt="(.*?)"(.*?)>#','<div style="display: inline-block;position:relative"><img$1 src="'.themeurl('/1.jpg').'" data-src="$2$3"$5$7"><div></div></div>', $content);
+  $content = preg_replace('#<img(.*?) src="([^"]*/)?(([^"/]*)\.[^"]*)"(.*?) alt="(.*?)"(.*?)>#','<div style="display: inline-block;position:relative"><img$1 src="'.themeurl('/1.jpg').'" data-src="$2$3"$5$7><div></div></div>', $content);
   $content = preg_replace('#<pre>([\s\S]*?)<\/pre>#','<div style="background:#eeeeee;border:1px solid #e5e5e5;border-bottom-width:0;padding:0 5px;">Code</div><pre>$1$2$3</pre>', $content);
   return $content;}
 function getSubstr($str, $leftStr, $rightStr)
