@@ -11,7 +11,7 @@ a{color:#222;text-decoration:none}
 a:focus,a:hover{color:#222;background-color:#f0f8ff}
 a small{font-size:11px;color:#777;margin-top:-.3em;display:block}
 a:hover small{color:#777}
-#wrap{width: 860px;margin:0 auto;}
+#wrap{width:860px;margin:0 auto}
 blockquote{border-left:1px solid #e5e5e5;margin:0;padding:0 0 0 20px;font-style:italic}
 code{background-color:#000;border-radius:2px;color:#fff;font-size:.8rem;margin:0 2px;padding:2px 5px;white-space:pre-wrap}
 code,pre{font-family:Monaco,Bitstream Vera Sans Mono,Lucida Console,Terminal,Consolas,Liberation Mono,DejaVu Sans Mono,Courier New,monospace}
@@ -22,7 +22,7 @@ td,th{text-align:left;padding:5px 10px;border-bottom:1px solid #e5e5e5}
 dt{font-weight:700}
 dt,th{color:#444}
 img{max-width:100%;height:auto}
-header{width: 32%;float:left;-webkit-font-smoothing:subpixel-antialiased}
+header{width:32%;float:left;-webkit-font-smoothing:subpixel-antialiased}
 p.tips{background-color:#f8f8f8;border-bottom-right-radius:2px;border-left:4px solid #f66;border-top-right-radius:2px;margin:2em 0;padding:12px 24px 12px 30px;position:relative}
 p.tips:before{background-color:#f66;border-radius:100%;color:#fff;content:"!";font-family:Dosis,Source Sans Pro,Helvetica Neue,Arial,sans-serif;font-size:14px;font-weight:700;left:-12px;line-height:20px;position:absolute;height:20px;width:20px;text-align:center;top:14px}
 ul.menu{list-style:none;height:40px;padding:0;width:99%}
@@ -34,6 +34,7 @@ strong{color:#222;font-weight:400}
 .menu li+li+li{border-right:none;width:33%}
 .menu a strong{font-size:14px;display:block;color:#222}
 #search-form,section{width:60%;float:right;padding-bottom:10px;transition:all .3s;background-color:#fff}
+#main>:not(#post){animation:upin .3s;-webkit-animation:upin .3s}
 small{font-size:11px}
 hr{border:0;background:#e5e5e5;height:1px;margin:0 0 20px}
 footer{float:left;position:fixed;bottom:10px;-webkit-font-smoothing:subpixel-antialiased}
@@ -139,3 +140,10 @@ code,pre{word-wrap:normal}
 }
 @media print{body{padding:.4in;font-size:12pt;color:#444}
 }
+@keyframes upin{0%{opacity:0;transform:translateY(30px)}
+100%{opacity:1;transform:translateY(0)}
+}
+@-webkit-keyframes upin{0%{opacity:0;-webkit-transform:translateY(30px)}
+100%{opacity:1;-webkit-transform:translateY(0)}
+}
+
