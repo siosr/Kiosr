@@ -6,7 +6,7 @@
 	$this->need('h.php'); ?>
 <small><?php echo $this->date('d M Y').' 字数统计:'.art_count($this->cid).' Hits:'.get_post_view($this) ?></small>
 <h1 id="post"><?php $this->title() ?></h1>
-<p class="view">by <a href="<?php $this->author->permalink(); ?>"><?php $this->author(); ?></a><a style="float:right"class="link" href="<?php echo $this->options->siteUrl().$this->cid ?>.md" target="_blank">查看本文Markdown版本</a></p>
+<p class="view">by <a href="<?php $this->author->permalink(); ?>"><?php $this->author(); ?></a><a style="float:right" class="link" href="<?php echo $this->options->siteUrl().$this->cid ?>.md" target="_blank">查看本文Markdown版本</a></p>
 <article>
 	<?php $this->content(); ?>
 </article>
