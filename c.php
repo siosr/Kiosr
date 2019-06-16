@@ -22,15 +22,11 @@ if ($comments->levels > 0) {
 $comments->alt(' comment-odd', ' comment-even');
 echo $commentClass;
 ?>">
-<div class="commentator-avatar">
-	<img class="avatar" src="<?php echo themeurl('/1.jpg')?>" data-src="<?php echo getGravatar($comments->mail); ?>">
-	<span class="comment-reply"><a onclick="return TypechoComment.reply('comment-<?php $comments->coid();?>', <?php $comments->coid();?>, '@<?php echo $comments->author; ?>','<?php $comments->permalink(); ?>');" href="javascript:void(0)" rel="nofollow" data-theid="comment-<?php $comments->coid();?>">回应</a></span>
-</div>
 <div class="commentator-comment">
 <div class="name">
 	<p>
 		<span class="commentator-name"><strong class="author_name"><?php $comments->author(); ?></strong><?php getCommentAt($comments->coid); ?></span>
-		<span class="comment-time"><?php echo timesince($comments->created); ?></span>
+		<span class="comment-time"><?php echo timesince($comments->created); ?></span><span class="comment-reply"><a class="i reply" onclick="return TypechoComment.reply('comment-<?php $comments->coid();?>', <?php $comments->coid();?>, '@<?php echo $comments->author; ?>','<?php $comments->permalink(); ?>');" href="javascript:void(0)" rel="nofollow" data-theid="comment-<?php $comments->coid();?>"></a></span>
 	</p>
 </div>
 	<div class="comment-chat" data-link="<?php $comments->permalink(); ?>">
