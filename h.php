@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<link href="<?php echo themeurl('/mian.css')?>?v=182" rel="stylesheet" type="text/css">
+	<link href="<?php echo themeurl('/main.css')?>?v=182" rel="stylesheet" type="text/css">
 	<script>var $caches="<?php echo themeurl('/caches/cache.json')?>";</script>
 	<script src="<?php echo themeurl('/main.js')?>?v=163"></script>
 	</head>
