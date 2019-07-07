@@ -7,5 +7,5 @@
 <a><h1 id="post"><?php $this->title() ?></h1></a>
 <p><a><?php $this->date('M d,Y')?></a></p>
 <article><?php $this->content(); ?></article>
-<p class="tag-a"><i class="i tag"></i><?php $this->tags('', true, 'none'); ?><a id="response"><i class="i reply"></i><span id="pls"><?php $this->commentsNum(_t('0'), _t('1'), _t('%d')); ?></span>&nbsp;</a></p>
+<p class="tag-a"><i class="i tag"></i><?php $this->tags('', true, 'none'); ?><?php if($this->allow('comment')): ?><a id="response"><i class="i reply"></i><span id="pls"><?php $this->commentsNum(_t('0'), _t('1'), _t('%d')); ?></span>&nbsp;</a><?php endif; ?></p>
 <?php $this->need('f.php');} ?>
