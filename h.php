@@ -7,20 +7,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<script>var $caches="<?php echo themeurl('/caches/cache.json')?>",js={css:function(a){var b,c;if(!a||0===a.length)throw new Error('argument "path" is required !');b=document.getElementsByTagName("head")[0],c=document.createElement("link"),c.href=a,c.rel="stylesheet",c.type="text/css",b.appendChild(c)},js:function(a){var b,c;if(!a||0===a.length)throw new Error('argument "path" is required !');b=document.getElementsByTagName("head")[0],c=document.createElement("script"),c.src=a,c.type="text/javascript",b.appendChild(c)}};js.css("<?php echo themeurl('/main.css')?>?v=77"),js.js("<?php echo themeurl('/main.js')?>?v=63");</script>
+	<link href="<?php echo themeurl('/mian.css')?>?v=182" rel="stylesheet" type="text/css">
+	<script>var $caches="<?php echo themeurl('/caches/cache.json')?>";</script>
+	<script src="<?php echo themeurl('/main.js')?>?v=163"></script>
 	</head>
 	<body>
 		<div id="wrap">
 			<div id="backdrop"></div>
 			<header id="bar" class="hidden">
 				<h1><a nohover href="<?php $this->options->siteUrl(); ?>"><?php $this->options->t(); ?><small><?php $this->options->s(); ?></small></a></h1>
-				<img src="<?php echo img()?>" data-src="<?php $this->options->logo() ?>" >
 				<?php $this->options->dh() ?>
+				<div id="nav" class="menu"><?php getExplode($this->options->fl);?></div>
 			</header>
-			<div id="toggle"><span></span><span></span><span></span></div>
+			<section id="search">
 				<form id="search-form" method="post" action="./" role="search">
 					<input id="search-input" type="text" name="s" class="ins-search-input" placeholder="想要查找什么...">
+					<b id="search-close">×</b>
 				</form>
-			<section id="search"></section><a id="Ty" href="#"></a>
+				<div id="search-result"></div>
+			</section><a id="Ty" href="#"></a>
 			<section id="main">
 <?php };?>
