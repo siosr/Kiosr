@@ -45,8 +45,6 @@ echo $commentClass;
 <div id="comments">
   <span id="hf"><?php echo $this->respondId?></span>
 	<?php $this->comments()->to($comments); ?>
-	<?php if ($comments->have()): ?>
-	<?php endif; ?>
 	<?php if($this->allow('comment')): ?>
 	<p class="time"><?php $this->commentsNum(_t('0'), _t('1'), _t('%d')); ?></p>
 	<div id="<?php $this->respondId(); ?>" class="respond">
@@ -67,8 +65,6 @@ echo $commentClass;
 				</div>
 		</form>
 	</div><br>
-	<?php else: ?>
-	<br><h3><?php _e('> 啊嘞,关闭评论了噢!'); ?></h3>
 	<?php endif; ?>
   	<?php $comments->listComments(); ?>
   	<?php $comments->pageNav(); ?>
