@@ -156,7 +156,7 @@ Typecho_Widget::widget('Widget_Metas_Category_List')->to($category);
 	$output = substr($output,0,strlen($output)-1);
 $data = '['.$output.']';
 if (file_exists($TheFile)) {
-  if ( time() - filemtime( $TheFile) > 30){
+  if ( time() - filemtime( $TheFile) > 600){
   $cacheFile->cacheData('cache', $data);
   }; //5分钟300秒，时间可以自己调整
 } else {
@@ -190,3 +190,5 @@ function getExplode($str){
 		}
     }
 }
+
+
