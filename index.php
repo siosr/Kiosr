@@ -2,9 +2,9 @@
 /**
  * 文字主题
  *
- * @package 拉屎6.0
+ * @package 拉屎6.1
  * @author 南蛰(Kiosr)
- * @version 6.0
+ * @version 6.1
  * @link http://moe.sb
  */
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
@@ -22,8 +22,10 @@ if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 		<tr>
 			<td>
 				<h2><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h2>
-				<p><?php echo $this->date('d M Y').' | Hits: '.get_post_view($this) ?></p>
-				<div ><?php $this->excerpt(50,'···'); ?></div>
+              	<div><?php echo $this->category(',',''); ?></div>
+				<p>
+				<?php $this->date('M d,Y')?>
+				</p>
 			</td>
 		</tr>
 <?php $time=$this->created; endwhile; ?>
