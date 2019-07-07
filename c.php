@@ -42,13 +42,13 @@ echo $commentClass;
 	<?php }?>
 </li>
 <?php } ?>
-<h2 id="response">共计<span id="pls"><?php $this->commentsNum(_t(' 0 '), _t(' 1 '), _t(' %d ')); ?></span>条评论</h2>
 <div id="comments">
   <span id="hf"><?php echo $this->respondId?></span>
 	<?php $this->comments()->to($comments); ?>
 	<?php if ($comments->have()): ?>
 	<?php endif; ?>
 	<?php if($this->allow('comment')): ?>
+	<p class="time"><?php $this->commentsNum(_t('0'), _t('1'), _t('%d')); ?></p>
 	<div id="<?php $this->respondId(); ?>" class="respond">
 		<div class="cancel-comment-reply" style="display:none"><span class="reply-name"></span><a href="javascript:void(0)" id="cancel-comment-reply-link" rel="nofollow" onclick="return TypechoComment.cancelReply();" nohover>×</a></div>
 		<form method="post" action="<?php $this->commentUrl() ?>" id="comment-form" role="form">
@@ -67,9 +67,9 @@ echo $commentClass;
 				</div>
 		</form>
 	</div><br>
-	<?php $comments->listComments(); ?>
 	<?php else: ?>
-    <?php $comments->listComments(); ?>
 	<br><h3><?php _e('> 啊嘞,关闭评论了噢!'); ?></h3>
 	<?php endif; ?>
+  	<?php $comments->listComments(); ?>
+  	<?php $comments->pageNav(); ?>
 </div>
