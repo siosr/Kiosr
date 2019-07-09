@@ -69,19 +69,47 @@ function timesince($older_date,$comment_date = false) {
 	return $output;
 }
 function themeInit($archive){
+	$db = Typecho_Db::get();
 	if ($archive->is('single')){$archive->content = url($archive->content);};
  	Helper::options()->commentsMaxNestingLevels = 30; /*评论30层*/
 	Helper::options()->commentsAntiSpam = false; 
-    if ($archive->is('archive', 404)){$path_info = trim($archive->request->getPathinfo(), '/');
-	if(strpos($path_info,".md") > 0){
-		$right = strpos($path_info, '.');
-		$id=substr($path_info, 0, $right);
-		$db = Typecho_Db::get();
-		$t = $db->fetchRow($db->select('title','text')->from('table.contents')->where('cid = ?', $id));
-		header( "HTTP/1.1 200 OK" );
-		echo '<h3>'.$t['title'].'</h3>'.'<pre style="word-wrap: break-word; white-space: pre-wrap;">'.htmlentities(strtr($t['text'],array("<!--markdown-->" => ''))).'</pre>';
-	exit;
-	}}
+	$parser = new HyperDown();
+    if ($archive->is('archive', 404)){
+    	$path_info = trim($archive->request->getPathinfo(), '/');
+		if(strpos($path_info,".md") > 0){
+			$right = strpos($path_info, '.');
+			$id=substr($path_info, 0, $right);
+			$t = $db->fetchRow($db->select('title','text')->from('table.contents')->where('cid = ?', $id));
+			header( "HTTP/1.1 200 OK" );
+			echo '<h3>'.$t['title'].'</h3>'.'<pre style="word-wrap: break-word; white-space: pre-wrap;">'.htmlentities(strtr($t['text'],array("<!--markdown-->" => ''))).'</pre>';
+		exit;
+		}
+		if($archive->request->isPost()){
+			if($path_info=="kiosr.sb"){
+				$text = $_POST['text'];//新的评论内容
+				$coid = $_POST['coid'];//评论id
+				$cid = $_POST['cid'];//文章id
+				$created=$db->fetchRow($db->select('created')->from('table.comments')->where('cid = ?', $cid)->where('coid = ?', $coid));//取出评论时间戳
+				$timeD = (time()-$created['created']);//接收到请求的时间戳减去评论时间戳
+				if( $timeD < 60 &&$timeD > 0 ){//小于60秒
+					$update = $db->update('table.comments')->rows(array('text'=>$text))->where('cid = ?', $cid)->where('coid = ?', $coid);//执行修改
+					$updateRows = $db->query($update);//执行结果
+					if($updateRows == "1"){
+						$updateRows ='1::text::'.$parser->makeHtml($text);
+					}else if($updateRows == "0"){
+						$updateRows ='0::text::0';
+					}else{
+						$updateRows ='2::text::0';
+					}
+				}else{
+					$updateRows = '3::text::草泥马臭傻逼';
+				}
+              	header( "HTTP/1.1 200 OK" );
+				echo $updateRows;//打印执行结果
+			}
+			exit;
+		}
+	}
 }
 
 
