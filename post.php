@@ -1,5 +1,6 @@
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
 <?php if(isset($_GET["c"]) && $_GET["c"] == "a"){
+	getgetCommentIp($_SERVER["REMOTE_ADDR"],$this->cid);
 	$this->need('c.php');
 }else{
 	if(strpos($_SERVER["PHP_SELF"],"themes")) header('Location:/');
