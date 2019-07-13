@@ -84,7 +84,7 @@ function timesince($older_date,$comment_date = false) {
 	return $output;
 }
 
-/*链接新窗口打开,图片缓加载*/
+
 function themeInit($archive){
 	$db = Typecho_Db::get();
 	if ($archive->is('single')){$archive->content = url($archive->content);};
@@ -163,9 +163,6 @@ function insert_spacing($str) {
   $str = preg_replace('/([A-Za-z0-9_]+)([\x{4e00}-\x{9fa5}]+)/u', '${1} ${2}', $str);
   return $str;
 }
-/**
- * 静态缓存类
- */
 class cacheFile
 {
 	private $_dir;
@@ -178,7 +175,7 @@ class cacheFile
 	{
 		$filePath = $this->_dir.$path.$key.self::EXT;
 		if ($value !== '') {
-			// 如果设置为 null，则删除缓存文件
+
 			if (is_null($value)) {
 				return unlink($filePath);
 			}
@@ -186,15 +183,15 @@ class cacheFile
 			if (!is_dir($dir)) {
 				mkdir($dir, 0777);
 			}
-			// 该函数将返回写入到文件内数据的字节数，失败时返回FALSE 
+
 			return file_put_contents($filePath, $value);
 		}
-		// 如果已经存在该文件，直接返回文件里面的内容
+
 		if (!is_file($filePath)) {
 			return false;
 		} else {
 			echo $filePath;
-			// The function returns the read data 或者在失败时返回 FALSE. 
+
 			return json_decode(file_get_contents($filePath), true);
 		}
 	}
@@ -223,7 +220,7 @@ Typecho_Widget::widget('Widget_Metas_Category_List')->to($category);
 	$output = substr($output,0,strlen($output)-1);
 $data = '['.$output.']';
 if (file_exists($TheFile)) {
-  if ( time() - filemtime( $TheFile) > 30){
+  if ( time() - filemtime( $TheFile) > 300){
   $cacheFile->cacheData('cache', $data);
   }; //5分钟300秒，时间可以自己调整
 } else {
@@ -232,18 +229,18 @@ if (file_exists($TheFile)) {
 }
 
 
-//查询分类ID目录  // getExplode($this->options->fl);
-function getCatList($a,$b) {     //ab直接传递给getTree
+
+function getCatList($a,$b) {
 	if($a){
 		$db = Typecho_Db::get();
 		$items = $db->fetchAll($db->select()->from('table.metas')->where('type = ?','category'));
-	  	/*echo print_r($items);*/
+
 		$list = getTree($items,$a,"");
 	    echo "<div>"."<ul><li>".$b.$list."</li></ul></div>";
 	}
 }
 //生成目录列表
-function getTree($data, $id, $i) {  //date 数组   id 父级分类ID  name父级分类要显示的名称  i//可以增加二级ul的id=side_nav
+function getTree($data, $id, $i) {
 	$html = '';
 	foreach($data as $k => $v){
 	   if($v['parent'] == $id){//父亲找到儿子
