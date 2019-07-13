@@ -13,7 +13,7 @@ function themeConfig($form) {
 	$fl = new Typecho_Widget_Helper_Form_Element_Text('fl', NULL, NULL, _t('目录'), _t('输入目录ID及需要显示的名称 如 1,默认分类;'));
 	$form->addInput($fl);
 }
-
+/*回复内艾特*/
 function getCommentAt($coid){
 	$db   = Typecho_Db::get();
 	$prow = $db->fetchRow($db->select('parent')
@@ -21,20 +21,35 @@ function getCommentAt($coid){
 		->where('coid = ? AND status = ?', $coid, 'approved'));
 	$parent = $prow['parent'];
 	if ($parent != "0") {
-		$arow = $db->fetchRow($db->select('author')
+		$arow = $db->fetchRow($db->select('author','status')
 			->from('table.comments')
-			->where('coid = ? AND status = ?', $parent, 'approved'));
+			->where('coid = ?', $parent));
 		$author = $arow['author'];
+		$status = $arow['status'];
 		if($author){
-			$href   = ' <a class="at" uid="'.$parent.'" onclick="scrollt(\'comment-'.$parent.'\'); return false;">@'.$author.'</a>';
-		}else{
-			$href   = '<a href="javascript:void(0)">评论审核中···</a>';
+			if($status=='approved'){
+				$href   = ' <a class="at" uid="'.$parent.'" onclick="scrollt(\'comment-'.$parent.'\'); return false;">@'.$author.'</a>';
+			}else if($status=='waiting'){
+				$href   = '<a href="javascript:void(0)">评论审核中···</a>';
+			}
 		}
 		echo $href;
 	} else {
 		echo "";
 	}
 }
+
+
+
+function getgetCommentIp($ip,$cid){
+	$db   = Typecho_Db::get();
+	$i = $db->fetchRow($db->select('coid')
+		->from('table.comments')
+		->where('ip = ?', $ip)->order('created',Typecho_Db::SORT_DESC));
+	echo '<a class="none coid">'.$i['coid'].'</a><a class="none cid">'.$cid.'</a>';
+}
+
+
 
 function themeurl($i){
 return Helper::options()->themeUrl.$i;
@@ -48,7 +63,7 @@ function is_ajax()
     }
     return false;
 }
-
+/*判断时间区间*/
 function timesince($older_date,$comment_date = false) {
 	$chunks = array(
 		array(86400 , '天'),
@@ -68,6 +83,8 @@ function timesince($older_date,$comment_date = false) {
 
 	return $output;
 }
+
+/*链接新窗口打开,图片缓加载*/
 function themeInit($archive){
 	$db = Typecho_Db::get();
 	if ($archive->is('single')){$archive->content = url($archive->content);};
@@ -92,18 +109,33 @@ function themeInit($archive){
 				$created=$db->fetchRow($db->select('created')->from('table.comments')->where('cid = ?', $cid)->where('coid = ?', $coid));//取出评论时间戳
 				$timeD = (time()-$created['created']);//接收到请求的时间戳减去评论时间戳
 				if( $timeD < 60 &&$timeD > 0 ){//小于60秒
-					$update = $db->update('table.comments')->rows(array('text'=>$text))->where('cid = ?', $cid)->where('coid = ?', $coid);//执行修改
-					$updateRows = $db->query($update);//执行结果
+					if($text){
+						$update = $db->update('table.comments')->rows(array('text'=>$text))->where('cid = ?', $cid)->where('coid = ?', $coid);//执行修改
+						$updateRows = $db->query($update);//执行结果
+					}else{
+						$delete = $db->delete('table.comments')->where('cid = ?', $cid)->where('coid = ?', $coid);//执行删除
+						$db->query($delete);
+						$num = $db->fetchRow($db->select('commentsNum')->from('table.contents')->where('cid = ?', $cid));
+						$num = $num['commentsNum']-1;
+						$update = $db->update('table.contents')->rows(array('commentsNum'=>$num))->where('cid = ?', $cid);//执行修改
+						$db->query($update);
+						$updateRows = "4";//执行结果
+					}
+				}else{
+					$updateRows="2";
+				}
 					if($updateRows == "1"){
 						$updateRows ='1::text::'.$parser->makeHtml($text);
 					}else if($updateRows == "0"){
 						$updateRows ='0::text::0';
+					}else if($updateRows == "2"){
+						$updateRows ='3::text::0';
+					}else if($updateRows == "4"){
+						$updateRows ='4::text::0';
 					}else{
-						$updateRows ='2::text::0';
+						$updateRows = '2::text::草泥马臭傻逼';
 					}
-				}else{
-					$updateRows = '3::text::草泥马臭傻逼';
-				}
+
               	header( "HTTP/1.1 200 OK" );
 				echo $updateRows;//打印执行结果
 			}
@@ -115,7 +147,8 @@ function themeInit($archive){
 
 function url($content){
   $content = preg_replace('#<a(.*?) href="([^"]*/)?(([^"/]*)\.[^"]*)"(.*?)>#','<a$1 href="$2$3"$5 target="_blank">', $content);
-  $content = preg_replace('#<img(.*?) src="([^"]*/)?(([^"/]*)\.[^"]*)"(.*?)>#','<div style="max-width:100%;display:inline-block;background:rgb(181, 191, 194) none repeat scroll 0% 0%;border-radius:5px"><img$1 class="ani" data-src="$2$3"></div>', $content);
+  $content = preg_replace('#<img(.*?) src="([^"]*/)?(([^"/]*)\.[^"]*)"(.*?)><img(.*?) src="([^"]*/)?(([^"/]*)\.[^"]*)"(.*?)>#','<div class="ImgBOX"><img$1 no class="ani" data-src="$2$3"></div>', $content);
+  $content = preg_replace('#<x>(?:.|[\r\n])*?</x>#','<div class="Img">${1}</div>', $content);
   return insert_spacing($content);}
 function getSubstr($str, $leftStr, $rightStr)
 {
@@ -125,14 +158,14 @@ function getSubstr($str, $leftStr, $rightStr)
 	return substr($str, $left + strlen($leftStr), $right-$left-strlen($leftStr));
 }
 
-function img(){
-	return "data:image/svg+xml,%3Csvg viewBox='0 0 1024 1024' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M811 640V341H213v278l60-56 115 98 226-196 197 175zm85-384v512H128V256h768z' fill='%23999'/%3E%3C/svg%3E";
-}
 function insert_spacing($str) {
   $str = preg_replace('/([\x{4e00}-\x{9fa5}]+)([A-Za-z0-9_]+)/u', '${1} ${2}', $str);
   $str = preg_replace('/([A-Za-z0-9_]+)([\x{4e00}-\x{9fa5}]+)/u', '${1} ${2}', $str);
   return $str;
 }
+/**
+ * 静态缓存类
+ */
 class cacheFile
 {
 	private $_dir;
@@ -145,6 +178,7 @@ class cacheFile
 	{
 		$filePath = $this->_dir.$path.$key.self::EXT;
 		if ($value !== '') {
+			// 如果设置为 null，则删除缓存文件
 			if (is_null($value)) {
 				return unlink($filePath);
 			}
@@ -152,44 +186,18 @@ class cacheFile
 			if (!is_dir($dir)) {
 				mkdir($dir, 0777);
 			}
+			// 该函数将返回写入到文件内数据的字节数，失败时返回FALSE 
 			return file_put_contents($filePath, $value);
 		}
+		// 如果已经存在该文件，直接返回文件里面的内容
 		if (!is_file($filePath)) {
 			return false;
 		} else {
 			echo $filePath;
+			// The function returns the read data 或者在失败时返回 FALSE. 
 			return json_decode(file_get_contents($filePath), true);
 		}
 	}
-}
-
-function getCatList($a,$b) {
-	if($a){
-		$db = Typecho_Db::get();
-		$items = $db->fetchAll($db->select()->from('table.metas')->where('type = ?','category'));
-		$list = getTree($items,$a,"");
-	    echo "<div>"."<ul><li>".$b.$list."</li></ul></div>";
-	}
-}
-function getTree($data, $id, $i) {
-	$html = '';
-	foreach($data as $k => $v){
-	   if($v['parent'] == $id){
-			$html .= "<li><a href=\"".Helper::options()->siteUrl.$v['slug']."\" class=\"item\">".$v['name']."</a>"; 
-			$html .= getTree($data, $v['mid'],"");
-			$html = $html."</li>";
-		}
-	}
-	return $html ? '<em></em><ul'.$i.'>'.$html.'</ul>' : $html ;
-}
-function getExplode($str){
-	if($str){
-		$arr = explode("；",$str);
-		foreach($arr as $u){
-		    $strarr = explode("，",$u);
-		        getCatList($strarr[0],$strarr[1]);
-		}
-    }
 }
 if(!file_exists($flag)) {
   touch($flag);
@@ -215,10 +223,45 @@ Typecho_Widget::widget('Widget_Metas_Category_List')->to($category);
 	$output = substr($output,0,strlen($output)-1);
 $data = '['.$output.']';
 if (file_exists($TheFile)) {
-  if ( time() - filemtime( $TheFile) > 600){
+  if ( time() - filemtime( $TheFile) > 30){
   $cacheFile->cacheData('cache', $data);
   }; //5分钟300秒，时间可以自己调整
 } else {
   $cacheFile->cacheData('cache', $data);
 };
 }
+
+
+//查询分类ID目录  // getExplode($this->options->fl);
+function getCatList($a,$b) {     //ab直接传递给getTree
+	if($a){
+		$db = Typecho_Db::get();
+		$items = $db->fetchAll($db->select()->from('table.metas')->where('type = ?','category'));
+	  	/*echo print_r($items);*/
+		$list = getTree($items,$a,"");
+	    echo "<div>"."<ul><li>".$b.$list."</li></ul></div>";
+	}
+}
+//生成目录列表
+function getTree($data, $id, $i) {  //date 数组   id 父级分类ID  name父级分类要显示的名称  i//可以增加二级ul的id=side_nav
+	$html = '';
+	foreach($data as $k => $v){
+	   if($v['parent'] == $id){//父亲找到儿子
+			$html .= "<li><a href=\"".Helper::options()->siteUrl.$v['slug']."\" class=\"item\">".$v['name']."</a>"; 
+			$html .= getTree($data, $v['mid'],"");//重新找儿子
+			$html = $html."</li>";
+		}
+	}
+	return $html ? '<em></em><ul'.$i.'>'.$html.'</ul>' : $html ;
+}
+//获取需要显示出来的目录列表
+function getExplode($str){
+	if($str){
+		$arr = explode("；",$str);
+		foreach($arr as $u){
+		    $strarr = explode("，",$u);
+		        getCatList($strarr[0],$strarr[1]);
+		}
+    }
+}
+
