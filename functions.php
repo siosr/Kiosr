@@ -13,7 +13,6 @@ function themeConfig($form) {
 	$fl = new Typecho_Widget_Helper_Form_Element_Text('fl', NULL, NULL, _t('目录'), _t('输入目录ID及需要显示的名称 如 1,默认分类;'));
 	$form->addInput($fl);
 }
-/*回复内艾特*/
 function getCommentAt($coid){
 	$db   = Typecho_Db::get();
 	$prow = $db->fetchRow($db->select('parent')
@@ -39,8 +38,6 @@ function getCommentAt($coid){
 	}
 }
 
-
-
 function getgetCommentIp($ip,$cid){
 	$db   = Typecho_Db::get();
 	$i = $db->fetchRow($db->select('coid')
@@ -48,8 +45,6 @@ function getgetCommentIp($ip,$cid){
 		->where('ip = ?', $ip)->order('created',Typecho_Db::SORT_DESC));
 	echo '<a class="none coid">'.$i['coid'].'</a><a class="none cid">'.$cid.'</a>';
 }
-
-
 
 function themeurl($i){
 return Helper::options()->themeUrl.$i;
@@ -63,7 +58,7 @@ function is_ajax()
     }
     return false;
 }
-/*判断时间区间*/
+
 function timesince($older_date,$comment_date = false) {
 	$chunks = array(
 		array(86400 , '天'),
@@ -84,7 +79,6 @@ function timesince($older_date,$comment_date = false) {
 	return $output;
 }
 
-
 function themeInit($archive){
 	$db = Typecho_Db::get();
 	if ($archive->is('single')){$archive->content = url($archive->content);};
@@ -103,23 +97,23 @@ function themeInit($archive){
 		}
 		if($archive->request->isPost()){
 			if($path_info=="kiosr.sb"){
-				$text = $_POST['text'];//新的评论内容
-				$coid = $_POST['coid'];//评论id
-				$cid = $_POST['cid'];//文章id
-				$created=$db->fetchRow($db->select('created')->from('table.comments')->where('cid = ?', $cid)->where('coid = ?', $coid));//取出评论时间戳
-				$timeD = (time()-$created['created']);//接收到请求的时间戳减去评论时间戳
-				if( $timeD < 60 &&$timeD > 0 ){//小于60秒
+				$text = $_POST['text'];
+				$coid = $_POST['coid'];
+				$cid = $_POST['cid'];
+				$created=$db->fetchRow($db->select('created')->from('table.comments')->where('cid = ?', $cid)->where('coid = ?', $coid));
+				$timeD = (time()-$created['created']);
+				if( $timeD < 60 &&$timeD > 0 ){
 					if($text){
-						$update = $db->update('table.comments')->rows(array('text'=>$text))->where('cid = ?', $cid)->where('coid = ?', $coid);//执行修改
-						$updateRows = $db->query($update);//执行结果
+						$update = $db->update('table.comments')->rows(array('text'=>$text))->where('cid = ?', $cid)->where('coid = ?', $coid);
+						$updateRows = $db->query($update);
 					}else{
-						$delete = $db->delete('table.comments')->where('cid = ?', $cid)->where('coid = ?', $coid);//执行删除
+						$delete = $db->delete('table.comments')->where('cid = ?', $cid)->where('coid = ?', $coid);
 						$db->query($delete);
 						$num = $db->fetchRow($db->select('commentsNum')->from('table.contents')->where('cid = ?', $cid));
 						$num = $num['commentsNum']-1;
-						$update = $db->update('table.contents')->rows(array('commentsNum'=>$num))->where('cid = ?', $cid);//执行修改
+						$update = $db->update('table.contents')->rows(array('commentsNum'=>$num))->where('cid = ?', $cid);
 						$db->query($update);
-						$updateRows = "4";//执行结果
+						$updateRows = "4";
 					}
 				}else{
 					$updateRows="2";
@@ -137,18 +131,16 @@ function themeInit($archive){
 					}
 
               	header( "HTTP/1.1 200 OK" );
-				echo $updateRows;//打印执行结果
+				echo $updateRows;
 			}
 			exit;
 		}
 	}
 }
-
-
 function url($content){
   $content = preg_replace('#<a(.*?) href="([^"]*/)?(([^"/]*)\.[^"]*)"(.*?)>#','<a$1 href="$2$3"$5 target="_blank">', $content);
-  $content = preg_replace('#<img(.*?) src="([^"]*/)?(([^"/]*)\.[^"]*)"(.*?)><img(.*?) src="([^"]*/)?(([^"/]*)\.[^"]*)"(.*?)>#','<div class="ImgBOX"><img$1 no class="ani" data-src="$2$3"></div>', $content);
-  $content = preg_replace('#<x>(?:.|[\r\n])*?</x>#','<div class="Img">${1}</div>', $content);
+  $content = preg_replace('#<img(.*?) src="([^"]*/)?(([^"/]*)\.[^"]*)"(.*?)>#','<div class="ImgBOX"><img$1 class="ani" data-src="$2$3"></div>', $content);
+  $content = preg_replace('#&lt;x&gt;((?:.|[\r\n])*?)&lt;/x&gt;#','<div class="Img">$1</div>', $content);
   return insert_spacing($content);}
 function getSubstr($str, $leftStr, $rightStr)
 {
@@ -163,6 +155,9 @@ function insert_spacing($str) {
   $str = preg_replace('/([A-Za-z0-9_]+)([\x{4e00}-\x{9fa5}]+)/u', '${1} ${2}', $str);
   return $str;
 }
+/**
+ * 静态缓存类
+ */
 class cacheFile
 {
 	private $_dir;
@@ -175,7 +170,6 @@ class cacheFile
 	{
 		$filePath = $this->_dir.$path.$key.self::EXT;
 		if ($value !== '') {
-
 			if (is_null($value)) {
 				return unlink($filePath);
 			}
@@ -183,15 +177,12 @@ class cacheFile
 			if (!is_dir($dir)) {
 				mkdir($dir, 0777);
 			}
-
 			return file_put_contents($filePath, $value);
 		}
-
 		if (!is_file($filePath)) {
 			return false;
 		} else {
 			echo $filePath;
-
 			return json_decode(file_get_contents($filePath), true);
 		}
 	}
@@ -220,38 +211,32 @@ Typecho_Widget::widget('Widget_Metas_Category_List')->to($category);
 	$output = substr($output,0,strlen($output)-1);
 $data = '['.$output.']';
 if (file_exists($TheFile)) {
-  if ( time() - filemtime( $TheFile) > 300){
+  if ( time() - filemtime( $TheFile) > 1800){
   $cacheFile->cacheData('cache', $data);
   }; //5分钟300秒，时间可以自己调整
 } else {
   $cacheFile->cacheData('cache', $data);
 };
 }
-
-
-
 function getCatList($a,$b) {
 	if($a){
 		$db = Typecho_Db::get();
 		$items = $db->fetchAll($db->select()->from('table.metas')->where('type = ?','category'));
-
 		$list = getTree($items,$a,"");
 	    echo "<div>"."<ul><li>".$b.$list."</li></ul></div>";
 	}
 }
-//生成目录列表
 function getTree($data, $id, $i) {
 	$html = '';
 	foreach($data as $k => $v){
-	   if($v['parent'] == $id){//父亲找到儿子
+	   if($v['parent'] == $id){
 			$html .= "<li><a href=\"".Helper::options()->siteUrl.$v['slug']."\" class=\"item\">".$v['name']."</a>"; 
-			$html .= getTree($data, $v['mid'],"");//重新找儿子
+			$html .= getTree($data, $v['mid'],"");
 			$html = $html."</li>";
 		}
 	}
-	return $html ? '<em></em><ul'.$i.'>'.$html.'</ul>' : $html ;
+	return $html ? '<b>×</b><ul'.$i.'>'.$html.'</ul>' : $html ;
 }
-//获取需要显示出来的目录列表
 function getExplode($str){
 	if($str){
 		$arr = explode("；",$str);
