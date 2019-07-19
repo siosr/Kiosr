@@ -2,9 +2,9 @@
 /**
  * 文字主题
  *
- * @package 拉屎6.1
+ * @package 拉屎6.2
  * @author 南蛰(Kiosr)
- * @version 6.1
+ * @version 6.2
  * @link http://moe.sb
  */
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
