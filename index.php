@@ -2,9 +2,9 @@
 /**
  * 文字主题
  *
- * @package 拉屎6.2
+ * @package 拉屎6.3
  * @author 南蛰(Kiosr)
- * @version 6.2
+ * @version 6.3
  * @link http://moe.sb
  */
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
@@ -22,7 +22,7 @@ if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 		<tr>
 			<td>
 				<h2><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h2>
-              	<div><?php echo $this->category(',',''); ?></div>
+				<div><?php $this->category(',',''); ?></div>
 				<p>
 				<?php $this->date('M d,Y')?>
 				</p>
@@ -34,5 +34,5 @@ if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 		</tr>
 	</tbody>
 </table>
-		<div class="loadmore">加载<span id="more"></span>的文章</div>
+		<div class="loadmore">加载<span id="more"></span>前的文章</div>
 <?php $this->need('f.php'); ?>
