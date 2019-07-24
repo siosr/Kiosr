@@ -62,8 +62,8 @@ function is_ajax()
 function timesince($older_date,$comment_date = false) {
 	$chunks = array(
 		array(86400 , '天'),
-		array(3600 , '小时'),
-		array(60 , '分钟'),
+		array(3600 , '时'),
+		array(60 , '分'),
 		array(1 , '秒'),
 	);
 	$newer_date = time();
@@ -74,7 +74,7 @@ function timesince($older_date,$comment_date = false) {
 		$name = $chunks[$i][1];
 		if (($count = floor($since / $seconds)) != 0) break;
 	}
-	$output = $count.$name.'前';
+	$output = $count.$name;
 
 	return $output;
 }
@@ -139,8 +139,10 @@ function themeInit($archive){
 }
 function url($content){
   $content = preg_replace('#<a(.*?) href="([^"]*/)?(([^"/]*)\.[^"]*)"(.*?)>#','<a$1 href="$2$3"$5 target="_blank">', $content);
-  $content = preg_replace('#<img(.*?) src="([^"]*/)?(([^"/]*)\.[^"]*)"(.*?)>#','<div class="ImgBOX"><img$1 class="ani" data-src="$2$3"></div>', $content);
-  $content = preg_replace('#&lt;x&gt;((?:.|[\r\n])*?)&lt;/x&gt;#','<div class="Img">$1</div>', $content);
+  $content = preg_replace('#<img(.*?) src="([^"]*/)?(([^"/]*)\.[^"]*)"(.*?)>#','<i class="ImgBOX"><img$1 class="ani" data-src="$2$3"></i>', $content);
+  $content = preg_replace('/\[img.*?\](.*?)\[\/img\]/s', '<div class="Img">${1}</div>', $content);
+  $content = preg_replace('/\[toc.*?\]/s', '<div id="TOC"></div>', $content);
+  $content = preg_replace('/\[ruby(.*?)\](.*?)\[\/ruby\]/s', '<ruby>${2}<rt>${1}</rt></ruby>', $content);
   return insert_spacing($content);}
 function getSubstr($str, $leftStr, $rightStr)
 {
