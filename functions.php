@@ -220,6 +220,7 @@ if (file_exists($TheFile)) {
 }
 
 function m($Str){
+  if($Str){
 	$arr = explode("\n",$Str);
 	$array = array();
 	for ($i = 0; $i < count($arr); $i++) {
@@ -239,6 +240,7 @@ function m($Str){
 		}
 		getCatList($v['id'],$u.$v['name']."</a>",$array);
 	};
+  }
 }
 
 function getCatList($a,$b,$arr){
