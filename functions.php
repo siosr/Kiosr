@@ -9,9 +9,6 @@ function themeConfig($form) {
 
     $dh = new Typecho_Widget_Helper_Form_Element_Textarea('dh', NULL, NULL, _t('导航'), _t('导航'));
     $form->addInput($dh);
-
-	$fl = new Typecho_Widget_Helper_Form_Element_Text('fl', NULL, NULL, _t('目录'), _t('输入目录ID及需要显示的名称 如 1,默认分类;'));
-	$form->addInput($fl);
 }
 function getCommentAt($coid){
 	$db   = Typecho_Db::get();
@@ -144,6 +141,7 @@ function url($content){
   $content = preg_replace('/\[toc.*?\]/s', '<div id="TOC"></div>', $content);
   $content = preg_replace('/\[ruby(.*?)\](.*?)\[\/ruby\]/s', '<ruby>${2}<rt>${1}</rt></ruby>', $content);
   return insert_spacing($content);}
+
 function getSubstr($str, $leftStr, $rightStr)
 {
 	$left = strpos($str, $leftStr);
@@ -220,32 +218,44 @@ if (file_exists($TheFile)) {
   $cacheFile->cacheData('cache', $data);
 };
 }
-function getCatList($a,$b) {
-	if($a){
-		$db = Typecho_Db::get();
-		$items = $db->fetchAll($db->select()->from('table.metas')->where('type = ?','category'));
-		$list = getTree($items,$a,"");
-	    echo "<div>"."<ul><li>".$b.$list."</li></ul></div>";
-	}
-}
-function getTree($data, $id, $i) {
-	$html = '';
-	foreach($data as $k => $v){
-	   if($v['parent'] == $id){
-			$html .= "<li><a href=\"".Helper::options()->siteUrl.$v['slug']."\" class=\"item\">".$v['name']."</a>"; 
-			$html .= getTree($data, $v['mid'],"");
-			$html = $html."</li>";
+
+function m($Str){
+	$arr = explode("\n",$Str);
+	$array = array();
+	for ($i = 0; $i < count($arr); $i++) {
+		$s = explode(",",$arr[$i]);
+		$array[$i]["id"] = $s[0];
+		$array[$i]["name"] = $s[1];
+		$array[$i]["url"] = $s[2];
+		$array[$i]["mid"] = $s[3];
+		//$array[$i]["target"] = $s[4];
+	};
+	$k = array_filter($array , function($t) use ($a) { return $t['mid'] == "";});
+	foreach($k as $c => $v){
+		if(strstr($v['url'],'h')){
+			$u = "<a href=\"".$v['url']."\">";
+		}else{
+			$u = "<a>";
 		}
-	}
-	return $html ? '<b>×</b><ul'.$i.'>'.$html.'</ul>' : $html ;
-}
-function getExplode($str){
-	if($str){
-		$arr = explode("；",$str);
-		foreach($arr as $u){
-		    $strarr = explode("，",$u);
-		        getCatList($strarr[0],$strarr[1]);
-		}
-    }
+		getCatList($v['id'],$u.$v['name']."</a>",$array);
+	};
 }
 
+function getCatList($a,$b,$arr){
+	$l = getTree($arr,$a,"");
+	echo ("<ul><li>".$b.$l."</li></ul>");
+}
+function getTree($d, $id, $i) {
+	$h = '';
+	foreach($d as $k => $v){
+		if(intval($v['mid']) == intval($id)){
+			if(strstr($v['url'],'h')){
+				$u = "href=\"".$v['url']."\"";
+			}
+			$h .= "<li><a ".$u." class=\"item\">".$v['name']."</a>"; 
+			$h .= getTree($d, $v['id'],"");
+			$h = $h."</li>";
+		}
+	}
+	return( $h ? '<b></b><ul'.$i.'>'.$h.'</ul>' : $h );
+}
