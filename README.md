@@ -55,6 +55,22 @@
      <li><a id="s">搜索</a></li>
     </ul>
 
+### 0x021. 6.3.1后更新的导航设置:
+
+`ID,名称,链接,上级 ID`. ⚠️注意 id 必须为整数
+
+    1,主页,https://moe.sb/
+    2,分类
+    21,日志,https://moe.sb/default/,2
+    22,魔法,https://moe.sb/mofa/,2
+    23,近期,https://moe.sb/jinqi/,2
+    24,说说,https://moe.sb/%E8%AF%B4%E8%AF%B4/,2
+    3,页面
+    31,关于,https://moe.sb/about.sb,3
+    32,赞助,https://moe.sb/donate.sb,3
+    33,留言,https://moe.sb/153.sb,3
+    4,友链,https://moe.sb/60.sb
+
 
 ----------
 
